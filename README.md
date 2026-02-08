@@ -1,6 +1,4 @@
-Tomato Plant Disease Detection using Transfer Learning
-
-Author: Mustafa Arıkan Date: December 22, 2025 
+#Tomato Plant Disease Detection using Transfer Learning
 
 📌 Project Overview
 Early diagnosis of diseases in agricultural production is critical for food safety and economic sustainability. This project presents a Deep Learning approach for the automatic detection of diseases (e.g., Early Blight, Bacterial Spot) in tomato plant leaves.
