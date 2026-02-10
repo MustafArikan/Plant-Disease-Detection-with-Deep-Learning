@@ -107,18 +107,6 @@ Model Performance Summary:
 
 ---
 
-## Project Structure
-Plant-Disease-Detection-with-Deep-Learning/
-│
-├── Graphics/
-│ ├── PDD0.png
-│ └── PDD1.png
-│
-├── Plant_Disease_Detection.ipynb
-└── README.md
-
----
-
 ## Installation
 
 Clone the repository: 
