@@ -44,7 +44,7 @@ Classes:
 
 ## Training and Validation Performance
 
-![Training and Validation Results](Graphics/PDD0)
+![Training and Validation Results](Graphics/PDD0.png)
 
 The model shows stable convergence between training and validation accuracy and loss curves, indicating controlled overfitting and consistent learning behaviour.
 
@@ -52,7 +52,7 @@ The model shows stable convergence between training and validation accuracy and 
 
 ## Confusion Matrix
 
-![Confusion Matrix](Graphics/PDD1)
+![Confusion Matrix](Graphics/PDD1.png)
 
 The confusion matrix illustrates class-wise prediction performance and highlights areas where misclassification occurs between visually similar diseases.
 
