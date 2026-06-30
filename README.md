@@ -117,13 +117,14 @@ cd Plant-Disease-Detection-with-Deep-Learning
 
 ---
 
-## Requirements
+## 📦 Requirements & Dependencies
 
-- Python 3.9+
-- TensorFlow / Keras
-- NumPy
-- Matplotlib
-- Scikit-learn
+The project requires Python 3.9+ and the following libraries:
+
+* **tensorflow** >= 2.8.0
+* **numpy** >= 1.20.0
+* **matplotlib** >= 3.4.0
+* **scikit-learn** >= 1.0.0
 
 GPU is optional but recommended for faster training.
 
