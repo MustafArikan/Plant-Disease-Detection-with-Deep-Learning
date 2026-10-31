@@ -1,157 +1,98 @@
 # Plant Disease Detection with Deep Learning
 
-## Project Overview
-This project focuses on multi-class classification of tomato leaf diseases using a deep learning approach based on transfer learning. The system analyzes plant leaf images and predicts disease categories to support early detection and decision-making in agriculture.
+Train a MobileNetV2 image classifier on tomato leaf images using a Google Colab notebook.
 
-A pretrained convolutional neural network was used as a feature extractor, and a custom classification head was trained on a tomato leaf dataset containing multiple disease categories along with healthy samples.
+The project demonstrates transfer learning, augmentation, validation curves, per-class evaluation, and a small image-prediction demo. The dataset and trained checkpoint are not included in this repository.
 
-The project demonstrates the full deep learning pipeline including preprocessing, model training, evaluation, visualization, and performance analysis.
+## Key Features
 
----
+- A frozen ImageNet-pretrained MobileNetV2 feature extractor.
+- Global average pooling, dropout, and a softmax classification head.
+- Image resizing to 224 × 224 and training-time geometric augmentation.
+- Early stopping and best-validation-accuracy checkpoint saving.
+- Confusion matrix, classification report, and up to 16 demo predictions.
 
-## Objectives
-- Perform multi-class image classification on plant leaf images
-- Detect various tomato diseases automatically
-- Apply transfer learning using a pretrained CNN
-- Evaluate model performance using multiple evaluation metrics
-- Visualize training progress and classification performance
+## Tech Stack
 
----
+Python, Google Colab, TensorFlow/Keras, NumPy, Matplotlib, Seaborn, and scikit-learn. [requirements.txt](requirements.txt) lists Python dependencies; `google.colab` is supplied by Colab rather than a standard local installation.
 
-## Dataset
-PlantVillage Tomato Leaf Dataset
+## Architecture & Project Structure
 
-Classes:
-- Tomato Bacterial Spot
-- Tomato Early Blight
-- Tomato Late Blight
-- Tomato Leaf Mold
-- Tomato Septoria Leaf Spot
-- Tomato Spider Mites
-- Tomato Target Spot
-- Tomato Yellow Leaf Curl Virus
-- Tomato Mosaic Virus
-- Tomato Healthy
-
-Dataset Characteristics:
-- Image-based multi-class classification problem
-- Balanced representation across disease categories
-- RGB images resized before training
-
----
-
-## Technologies Used
-- Python
-- TensorFlow / Keras
-- NumPy
-- Matplotlib
-- Scikit-learn
-
----
-
-## Model Architecture
-- Base Model: MobileNetV2 (Transfer Learning)
-- Input Size: 224x224 RGB images
-- Feature Extraction using pretrained ImageNet weights
-- Custom Dense Classification Layers
-- Activation Function: ReLU / Softmax (output layer)
-- Loss Function: Categorical Crossentropy
-- Optimizer: Adam
-- Evaluation Metric: Accuracy
-
----
-
-## Training Strategy
-- Transfer learning with pretrained convolutional layers
-- Initial layers frozen during early training
-- Custom classification head trained on tomato dataset
-- Image resizing and normalization applied
-- Training and validation split used
-- Monitoring training and validation loss to control overfitting
-
----
-
-## Training and Validation Performance
-
-![Training and Validation Results](Graphics/PDD0.png)
-
-The training and validation curves show stable convergence. Validation accuracy follows training accuracy closely, indicating controlled overfitting and consistent learning behaviour throughout epochs.
-
----
-
-## Confusion Matrix
-
-![Confusion Matrix](Graphics/PDD1.png)
-
-The confusion matrix highlights class-wise prediction performance.
-
-Observations:
-- High accuracy in Healthy and Viral disease classes
-- Some confusion between visually similar diseases such as Early Blight and Late Blight
-- Spider Mites and Target Spot occasionally overlap due to similar texture patterns
-- Most predictions remain concentrated along the diagonal, indicating strong classification performance
-
----
-
-## Evaluation Metrics
-- Accuracy
-- Confusion Matrix
-- Class-wise prediction distribution
-- Training Loss and Validation Loss Monitoring
-
-Model Performance Summary:
-- Validation Accuracy: approximately 85%
-- Stable training process
-- Minimal divergence between training and validation curves
-- Strong performance across most disease categories
-
----
-
-## Installation
-
-Clone the repository: 
-```bash
-git clone https://github.com/MustafArikan/Plant-Disease-Detection-with-Deep-Learning.git
-cd Plant-Disease-Detection-with-Deep-Learning
+```text
+.
+├── Plant_Disease_Detection.ipynb  # Drive setup, training, evaluation, demo
+├── Graphics/
+│   ├── PDD0.png                  # Historical training curves
+│   └── PDD1.png                  # Historical confusion matrix
+├── requirements.txt
+└── LICENSE
 ```
 
----
+The first code cell mounts Drive and copies an external dataset into Colab's local disk. Training reads separate `train/` and `valid/` directories. The next cell evaluates validation images without shuffling and displays example predictions. Class names and output-head size are inferred from the training subdirectories.
 
-## 📦 Requirements & Dependencies
+The original experiment describes ten tomato conditions: Bacterial Spot, Early Blight, Late Blight, Leaf Mold, Septoria Leaf Spot, Spider Mites, Target Spot, Yellow Leaf Curl Virus, Mosaic Virus, and Healthy. The actual supplied dataset determines the labels.
 
-The project requires Python 3.9+ and the following libraries:
+## Getting Started
 
-* **tensorflow** >= 2.8.0
-* **numpy** >= 1.20.0
-* **matplotlib** >= 3.4.0
-* **scikit-learn** >= 1.0.0
+1. Open [the notebook in Colab](https://colab.research.google.com/github/MustafArikan/Plant-Disease-Detection-with-Deep-Learning/blob/main/Plant_Disease_Detection.ipynb).
+2. Obtain a tomato-leaf image dataset under its source license and upload it to your Drive.
+3. Select a GPU runtime if available; CPU training is possible but slower.
+4. Install dependencies in a notebook cell if the selected runtime needs them:
 
-GPU is optional but recommended for faster training.
+```python
+%pip install -r requirements.txt
+```
 
----
+That command requires the repository to be present in the notebook's current directory. A local dependency installation alone cannot run the notebook unchanged because it imports `google.colab` and uses `/content` paths.
 
-## Reproducibility
+## Configuration
 
-To reproduce the results:
+Edit the paths in the notebook before running:
 
-1. Prepare the dataset in the correct directory structure
-2. Open the notebook file
-3. Run all cells sequentially
-4. Monitor training graphs and evaluation outputs
+| Setting | Purpose |
+|---|---|
+| `DRIVE_KAYNAK_YOLU` | Drive directory containing `train/` and `valid/` |
+| `COLAB_HEDEF_YOLU` | Local Colab copy, initially `/content/temp_data` |
+| `model_save_path` | Writable Drive destination for the best `.h5` checkpoint |
+| `grafik_yolu` | Training-curve destination |
+| `VAL_DIR` | Copied validation directory |
+| `TEST_DIR` | Optional directory containing demo images |
 
----
+Create the parent output directory before training. The later confusion-matrix and demo `savefig` calls also use Drive paths; update those destinations together. Training and validation directories must contain the same class subdirectories. No API credentials are needed beyond authorizing your own Drive mount.
 
-## Future Improvements
+## Usage
 
-- Advanced data augmentation
-- Hyperparameter optimization
-- Fine-tuning deeper layers
-- Testing EfficientNet and ResNet architectures
-- Real-time deployment for plant disease detection
+Run the setup/training cell first, then the evaluation/demo cell. The defaults use batch size 32 and up to ten epochs; early stopping monitors validation loss while the saved checkpoint monitors validation accuracy. The in-memory model and saved checkpoint can therefore represent different epochs.
 
----
+![Historical training curves](Graphics/PDD0.png)
+
+![Historical confusion matrix](Graphics/PDD1.png)
+
+These are historical artifacts, not newly reproduced benchmark results. No accuracy guarantee or class-balance claim is made for an unspecified external dataset.
+
+## Testing
+
+There is no automated test suite. Meaningful validation requires the external image dataset: verify class-index mappings, run training, inspect held-out predictions, and reproduce the classification report. A dependency-resolution check or notebook syntax check does not validate model quality.
+
+## Development & Quality
+
+Use an isolated environment for dependency experiments. Record TensorFlow, Keras, CUDA/runtime versions, dataset provenance, split rules, and random seeds alongside any new measurements. The current dependency ranges are not a reproducibility lock.
+
+## Roadmap
+
+- Make dataset and output paths configurable for local execution.
+- Align input preprocessing with the pretrained MobileNetV2 contract and retrain before comparing metrics.
+- Add a genuinely independent test set, deterministic seeds, and dataset checks.
+- Add a small inference interface after validating a redistributable checkpoint.
+
+## Contributing
+
+Provide dataset provenance and permission to share any example images. Include the runtime, class mapping, split procedure, and validation results with model changes. Do not commit personal Drive contents or model artifacts without a clear distribution policy.
+
+## License
+
+Code is distributed under the [MIT License](LICENSE). Dataset and pretrained-weight terms are separate.
 
 ## Author
-Mustafa Arıkan
 
-
+[Mustafa Arıkan](https://github.com/MustafArikan)
